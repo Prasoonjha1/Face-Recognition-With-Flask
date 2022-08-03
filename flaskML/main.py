@@ -1,10 +1,20 @@
 from flask import Flask, render_template,Response
 from Face import VideoCamera
 import numpy as np
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///service.db'
+db = SQLAlchemy(app)
 
+class Person(db.Model):
+    username = db.Column(db.String(30), nullable=False, unique=True,primary_key=True)
+    password = db.Column(db.String(30), nullable=False)
+    encodings = db.Column(db.JSON)
+    classnames = db.Column(db.JSON)
 
+    def __repr__(self):
+        return f'Person {self.username}'
 
 @app.route("/")
 @app.route('/home')
@@ -13,12 +23,8 @@ def home_page():
 
 @app.route('/market')
 def market_page():
-    items = [
-        {'id': 1, 'name': 'Phone', 'barcode': '893212299897', 'price': 500},
-        {'id': 2, 'name': 'Laptop', 'barcode': '123985473165', 'price': 900},
-        {'id': 3, 'name': 'Keyboard', 'barcode': '231985128446', 'price': 150}
-    ]
-    return render_template('market.html',items=items)
+    person = Person.query.all()
+    return render_template('market.html',persons=person)
 def gen(Face):
     while True:
         frame = Face.Face_Rec()
