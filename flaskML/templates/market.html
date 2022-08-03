@@ -7,24 +7,19 @@ Market Page
     <thead>
         <tr>
             <!-- Your Columns HERE -->
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Barcode</th>
-            <th scope="col">Price</th>
-            <th scope="col">Options</th>
+            <th scope="col">USERNAME</th>
+            <th scope="col">PASSWORD</th>
+            <th scope="col">INFO</th>
         </tr>
     </thead>
     <tbody>
         <!-- Your rows inside the table HERE: -->
-        {% for item in items %}
+        {% for person in persons %}
             <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.barcode }}</td>
-                <td>{{ item.price }}$</td>
+                <td>{{ person.username }}</td>
+                <td>{{ person.password }}</td>
                 <td>
                     <button class="btn btn-outline btn-info">More Info</button>
-                    <button class="btn btn-outline btn-success">Purchase this Item</button>
                 </td>
             </tr>
         {% endfor %}
