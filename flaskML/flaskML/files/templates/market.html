@@ -1,0 +1,28 @@
+{% extends 'base.html'  %}
+{% block title %}
+Market Page
+{% endblock %}
+{% block content %}
+<table class="table table-hover table-dark">
+    <thead>
+        <tr>
+            <!-- Your Columns HERE -->
+            <th scope="col">ID</th>
+            <th scope="col">NAME</th>
+            <th scope="col">INFO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+        {% for face in faces %}
+            <tr>
+                <td>{{ face.id }}</td>
+                <td>{{ face.name }}</td>
+                <td>
+                    <button class="btn btn-outline btn-info">More Info</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table> 
+{% endblock %} 
