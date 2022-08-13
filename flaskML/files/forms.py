@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import Length, EqualTo, Email, DataRequired,ValidationError
 from files.modules import Person
 
@@ -23,3 +23,8 @@ class LoginForm(FlaskForm):
     username = StringField(label='User Name:',validators=[DataRequired()])
     password = PasswordField(label='Password:',validators=[DataRequired()])
     submit = SubmitField(label='Sign in')
+
+class AddForm(FlaskForm):
+    name = StringField(label='Name:',validators=[DataRequired()])
+    rollNo = StringField(label='Roll No.:',validators=[DataRequired()])
+    submit = SubmitField(label='Submit')

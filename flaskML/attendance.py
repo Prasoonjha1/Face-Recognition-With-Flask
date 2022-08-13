@@ -1,15 +1,17 @@
-from datetime import datetime
-def markAttendance(name):
-    with open('Attendance.csv','r+') as f:
-        myDat = f.readlines()
-        nameList = []
-        ind=0
-        for line in myDat:
-            entry = line.split(',')
-            nameList.append(entry[1])
-            if entry[0] != 'S.No.':
-                ind = entry[0]
-        if name not in nameList:
-            now = datetime.now()
-            dtstring = now.strftime('%H:%M:%S')
-            f.writelines(f'\n{int(ind)+1},{name},{dtstring}')
+import pandas as pd
+import datetime
+import numpy as np
+import config
+
+def mark_attendance(name):
+    df = pd.read_csv('Attendance.csv')
+    if name!='unknown':
+        ind = 0
+        for nam in df['Roll No.']:
+            if nam == name:
+                print(str(ind)+":"+nam)
+                config.nameList[ind] = 'P'
+            ind+1
+        date_time_string = datetime.datetime.now().strftime("%d/%m/%y")
+        df[date_time_string] = config.nameList[::-1]
+        df.to_csv("Attendance.csv", index=False)

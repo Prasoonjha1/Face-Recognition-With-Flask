@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}
+Add Students Data
+{% endblock %}
+
+{% block content %}
+<body class="text-center">
+    <div class="container">
+        <form method="POST"  style="color:white">
+            {{ form.hidden_tag() }}
+            <img class="mb-4" src="https://lh3.googleusercontent.com/V7ujcCOEfNMYoREtdzZf5sjHkvE4ISU1pvxiWSZPo6_5BTbdkbv2YIFcNFZqF2SNk8Y=w2400" width="15%" alt="">
+            <h1 class="h3 mb-3 font-weight-normal">
+                Add Data
+            </h1>
+            <br>
+            {{ form.name.label() }}
+            {{ form.name(class="form-control", placeholder="Name") }}
+
+            {{ form.rollNo.label() }}
+            {{ form.rollNo(class="form-control", placeholder="Roll No.") }}
+
+            <br>
+
+
+            <div class="checkbox mb-3">
+               <h6>Go Back</h6>
+               <a class="btn btn-sm btn-secondary" href="{{ url_for('market_page') }}">back</a>
+            </div>
+
+            {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+
+        </form>
+    </div>
+</body>
+{% endblock %}

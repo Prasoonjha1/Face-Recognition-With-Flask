@@ -2,14 +2,22 @@
 {% block title %}
 Market Page
 {% endblock %}
+{% block navigation %}
+<li class="nav-item">
+    <a class="nav-link" style="color: lawngreen; font-weight: bold;" href="{{ url_for('add_page') }}">
+        <i class="bi bi-plus-circle"></i>
+        add
+    </a>
+</li>
+{% endblock %}
 {% block content %}
 <table class="table table-hover table-dark">
     <thead>
         <tr>
             <!-- Your Columns HERE -->
             <th scope="col">ID</th>
+            <th scope="col">ROLL NUMBER</th>
             <th scope="col">NAME</th>
-            <th scope="col">INFO</th>
         </tr>
     </thead>
     <tbody>
@@ -17,10 +25,8 @@ Market Page
         {% for face in faces %}
             <tr>
                 <td>{{ face.id }}</td>
+                <td>{{ face.roll_no }}</td>
                 <td>{{ face.name }}</td>
-                <td>
-                    <button class="btn btn-outline btn-info">More Info</button>
-                </td>
             </tr>
         {% endfor %}
     </tbody>

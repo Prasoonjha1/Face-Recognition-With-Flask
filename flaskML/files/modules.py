@@ -4,17 +4,16 @@ import face_recognition as fc
 import os
 import time
 from files import db,bcrypt,login_manager
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
+import attendance
+import config
 
-encodeListForKnown = np.load('data.npy')
-classNames = np.load('data1.npy')
 
 class VideoCamera(object):
     def __init__(self):
         self.video = cv.VideoCapture(0)
-        self.encodeListForKnown = encodeListForKnown
-        self.classNames = classNames
-    
+        self.encodeListForKnown = config.encodeListForKnown
+        self.classNames = config.classNames                
     def __del__(self):
         self.video.release()
 
@@ -30,11 +29,12 @@ class VideoCamera(object):
         for encodeFace, faceloc in zip(encodecurframe, facecrfr):
             matches = fc.compare_faces(self.encodeListForKnown, encodeFace)
             faceDis = fc.face_distance(self.encodeListForKnown, encodeFace)
-            '''print(faceDis)'''
+            
             matchIndex = np.argmin(faceDis)
             if matches[matchIndex]:
                 name = self.classNames[matchIndex].upper()
-                print(name)
+                #print(name)
+                attendance.mark_attendance(name)
                 y1,x2,y2,x1 = faceloc
                 y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
                 cv.rectangle(img,(x1,y1) , (x2,y2), (0,255,0),2)
@@ -48,6 +48,12 @@ class VideoCamera(object):
 def load_user(user_id):
     return Person.query.get(int(user_id))
         
+def findencodings(img):
+    
+    img = np.asarray(img)
+    img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+    encode = fc.face_encodings(img)[0]
+    return encode
 class Person(db.Model,UserMixin):
     id = db.Column(db.Integer,nullable=False,unique=True,primary_key=True)
     username = db.Column(db.String(length=30), nullable=False, unique=True)
@@ -68,17 +74,10 @@ class Person(db.Model,UserMixin):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
 
 class Faces(db.Model):
-    id = db.Column(db.String(length=30), nullable=False, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=30), nullable=False)
-    encodings = db.Column(db.JSON, unique=True,nullable=False)
+    roll_no = db.Column(db.String(length=20),nullable=False,unique=True)
     owner = db.Column(db.Integer(), db.ForeignKey('person.id'))
-    attendance = db.relationship("Attendance",backref='owned_user',lazy=True)
     
     def __repr__(self):
         return f'Faces {self.name}'
-
-class Attendance(db.Model):
-    id = db.Column(db.Integer(),nullable=False,unique=True,primary_key=True)
-    date = db.Column(db.JSON)
-    att = db.Column(db.JSON)
-    owner = db.Column(db.Integer(),db.ForeignKey('faces.id'))
